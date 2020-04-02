@@ -308,7 +308,6 @@ class LocationPickerState extends State<LocationPicker> {
       Map<String, dynamic> responseJson = jsonDecode(response.body);
 
       String road;
-
       if (responseJson['status'] == 'REQUEST_DENIED') {
         road = 'REQUEST DENIED = please see log for more details';
         print(responseJson['error_message']);
