@@ -16,9 +16,9 @@ class LocationResult {
 
   copyWith({LatLng latLng, String address, Map<String, dynamic> addresses}) {
     return LocationResult(
-      latLng: latLng,
-      address: address,
-      addresses: addresses,
+      latLng: latLng ?? this.latLng,
+      address: address ?? this.address,
+      addresses: addresses ?? this.addresses,
     );
   }
 
