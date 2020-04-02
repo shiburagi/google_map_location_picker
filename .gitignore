@@ -9,3 +9,4 @@ build/
 android/app/src/main/res/values/keys.xml
 lib/keys.dart
 /google_map_location_picker.iml
+example/ios/Flutter/flutter_export_environment.sh

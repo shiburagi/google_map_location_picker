@@ -27,13 +27,14 @@ class LocationPicker extends StatefulWidget {
     this.layersButtonEnabled,
     this.automaticallyAnimateToCurrentLocation,
     this.mapStylePath,
+    this.appBarBrightness,
     this.appBarColor,
     this.searchBarBoxDecoration,
     this.hintText,
     this.resultCardConfirmWidget,
     this.resultCardAlignment,
     this.resultCardDecoration,
-    this.resultCardPadding,
+    this.resultCardPadding, 
   });
 
   final String apiKey;
@@ -47,6 +48,7 @@ class LocationPicker extends StatefulWidget {
 
   final String mapStylePath;
 
+  final Brightness appBarBrightness;
   final Color appBarColor;
   final BoxDecoration searchBarBoxDecoration;
   final String hintText;
@@ -363,6 +365,7 @@ class LocationPickerState extends State<LocationPicker> {
           appBar: AppBar(
             iconTheme: Theme.of(context).iconTheme,
             elevation: 0,
+            brightness: widget.appBarBrightness,
             backgroundColor: widget.appBarColor,
             key: appBarKey,
             title: SearchInput(
@@ -413,6 +416,7 @@ Future<LocationResult> showLocationPicker(
   bool layersButtonEnabled = false,
   bool automaticallyAnimateToCurrentLocation = true,
   String mapStylePath,
+  Brightness appBarBrightness = Brightness.light,
   Color appBarColor = Colors.transparent,
   BoxDecoration searchBarBoxDecoration,
   String hintText,
@@ -426,6 +430,7 @@ Future<LocationResult> showLocationPicker(
       builder: (BuildContext context) {
         return LocationPicker(
           apiKey,
+          appBarBrightness: appBarBrightness,
           initialCenter: initialCenter,
           requiredGPS: requiredGPS,
           myLocationButtonEnabled: myLocationButtonEnabled,
