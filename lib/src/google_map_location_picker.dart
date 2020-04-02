@@ -34,7 +34,7 @@ class LocationPicker extends StatefulWidget {
     this.resultCardConfirmWidget,
     this.resultCardAlignment,
     this.resultCardDecoration,
-    this.resultCardPadding, 
+    this.resultCardPadding,
   });
 
   final String apiKey;
@@ -266,9 +266,10 @@ class LocationPickerState extends State<LocationPicker> {
   void getNearbyPlaces(LatLng latLng) {
     LocationUtils.getAppHeaders()
         .then((headers) => http.get(
-          "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
-            "key=${widget.apiKey}&" +
-            "location=${latLng.latitude},${latLng.longitude}&radius=150", headers: headers))
+            "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
+                "key=${widget.apiKey}&" +
+                "location=${latLng.latitude},${latLng.longitude}&radius=150",
+            headers: headers))
         .then((response) {
       if (response.statusCode == 200) {
         nearbyPlaces.clear();
@@ -302,18 +303,22 @@ class LocationPickerState extends State<LocationPicker> {
   Future reverseGeocodeLatLng(LatLng latLng) async {
     var response = await http.get(
         "https://maps.googleapis.com/maps/api/geocode/json?latlng=${latLng.latitude},${latLng.longitude}"
-        "&key=${widget.apiKey}", headers: await LocationUtils.getAppHeaders());
+        "&key=${widget.apiKey}",
+        headers: await LocationUtils.getAppHeaders());
 
     if (response.statusCode == 200) {
       Map<String, dynamic> responseJson = jsonDecode(response.body);
 
       String road;
+      Map<String, dynamic> addresses;
+
       if (responseJson['status'] == 'REQUEST_DENIED') {
+        addresses = {};
         road = 'REQUEST DENIED = please see log for more details';
         print(responseJson['error_message']);
       } else {
-        road =
-            responseJson['results'][0]['address_components'][0]['short_name'];
+        addresses = responseJson['results'][0]['address_components'][0];
+        road = addresses['short_name'];
       }
 
 //      String locality =
@@ -322,6 +327,7 @@ class LocationPickerState extends State<LocationPicker> {
       setState(() {
         locationResult = LocationResult();
         locationResult.address = road;
+        locationResult.addresses = addresses;
         locationResult.latLng = latLng;
       });
     }
@@ -379,7 +385,8 @@ class LocationPickerState extends State<LocationPicker> {
             requiredGPS: widget.requiredGPS,
             myLocationButtonEnabled: widget.myLocationButtonEnabled,
             layersButtonEnabled: widget.layersButtonEnabled,
-            automaticallyAnimateToCurrentLocation: widget.automaticallyAnimateToCurrentLocation,
+            automaticallyAnimateToCurrentLocation:
+                widget.automaticallyAnimateToCurrentLocation,
             mapStylePath: widget.mapStylePath,
             appBarColor: widget.appBarColor,
             searchBarBoxDecoration: widget.searchBarBoxDecoration,
@@ -434,7 +441,8 @@ Future<LocationResult> showLocationPicker(
           requiredGPS: requiredGPS,
           myLocationButtonEnabled: myLocationButtonEnabled,
           layersButtonEnabled: layersButtonEnabled,
-          automaticallyAnimateToCurrentLocation: automaticallyAnimateToCurrentLocation,
+          automaticallyAnimateToCurrentLocation:
+              automaticallyAnimateToCurrentLocation,
           mapStylePath: mapStylePath,
           appBarColor: appBarColor,
           hintText: hintText,

@@ -15,6 +15,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
+import '../google_map_location_picker.dart';
+import '../google_map_location_picker.dart';
+import '../google_map_location_picker.dart';
 import 'model/location_result.dart';
 import 'utils/location_utils.dart';
 
@@ -71,7 +74,7 @@ class MapPickerState extends State<MapPicker> {
 
   Position _currentPosition;
 
-  String _address;
+  LocationResult _address;
 
   void _onToggleMapTypePressed() {
     final MapType nextType =
@@ -209,7 +212,7 @@ class MapPickerState extends State<MapPicker> {
                 children: <Widget>[
                   Flexible(
                     flex: 20,
-                    child: FutureLoadingBuilder<String>(
+                    child: FutureLoadingBuilder<LocationResult>(
                         future: getAddress(locationProvider.lastIdleLocation),
                         mutable: true,
                         loadingIndicator: Row(
@@ -231,9 +234,8 @@ class MapPickerState extends State<MapPicker> {
                       FloatingActionButton(
                         onPressed: () {
                           Navigator.of(context).pop({
-                            'location': LocationResult(
+                            'location': _address.copyWith(
                               latLng: locationProvider.lastIdleLocation,
-                              address: _address,
                             )
                           });
                         },
@@ -248,7 +250,7 @@ class MapPickerState extends State<MapPicker> {
     );
   }
 
-  Future<String> getAddress(LatLng location) async {
+  Future<LocationResult> getAddress(LatLng location) async {
     try {
       var endPoint =
           'https://maps.googleapis.com/maps/api/geocode/json?latlng=${location?.latitude},${location?.longitude}&key=${widget.apiKey}';
@@ -256,7 +258,10 @@ class MapPickerState extends State<MapPicker> {
               headers: await LocationUtils.getAppHeaders()))
           .body);
 
-      return response['results'][0]['formatted_address'];
+      return LocationResult(
+        address: response['results'][0]['formatted_address'],
+        addresses: response['results'][0],
+      );
     } catch (e) {
       print(e);
     }

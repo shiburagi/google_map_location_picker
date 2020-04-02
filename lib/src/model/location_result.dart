@@ -10,7 +10,17 @@ class LocationResult {
   /// Latitude/Longitude of the selected location.
   LatLng latLng;
 
-  LocationResult({this.latLng, this.address});
+  Map<String, dynamic> addresses;
+
+  LocationResult({this.latLng, this.address, this.addresses});
+
+  copyWith({LatLng latLng, String address, Map<String, dynamic> addresses}) {
+    return LocationResult(
+      latLng: latLng,
+      address: address,
+      addresses: addresses,
+    );
+  }
 
   @override
   String toString() {
