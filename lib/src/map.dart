@@ -222,7 +222,7 @@ class MapPickerState extends State<MapPicker> {
                         builder: (context, address) {
                           _address = address;
                           return Text(
-                            address.address ?? 'Unnamed place',
+                            address?.address ?? 'Unnamed place',
                             style: TextStyle(fontSize: 18),
                           );
                         }),
